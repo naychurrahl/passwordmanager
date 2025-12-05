@@ -1,23 +1,13 @@
 import { ProfileProp, useApp } from "@/components/AppContext";
 import React, { useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  Switch,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Switch, View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AppButton from "@/components/AppButton";
 import Header from "@/components/Header";
 import DeleteModal from "@/app/DeleteModal";
 import AuthModal from "@/app/AuthModal";
 import { router } from "expo-router";
 import * as LocalAuthentication from "expo-local-authentication";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
 
 export default function Settings() {
   const [deleteMode, setDeleteMode] = useState<ProfileProp | null>(null);
@@ -40,30 +30,30 @@ export default function Settings() {
     });
 
     if (result.success) {
-        await AsyncStorage.removeItem("jarvis");
-        setAuth(null);
-        router.replace("/");
+      await AsyncStorage.removeItem("jarvis");
+      setAuth(null);
+      router.replace("/");
       return true;
     } else {
       return false;
     }
   };
 
-   const checkBiometricSupport = async () => {
-      const hasHardware = await LocalAuthentication.hasHardwareAsync();
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-      const supportedTypes =
-        await LocalAuthentication.supportedAuthenticationTypesAsync();
-  
-      if (hasHardware && isEnrolled && supportedTypes.length > 0) {
-        // Biometrics are available and enrolled
-        await authenticateWithBiometrics();
-        return true;
-      } else {
-        // Biometrics are not available or not enrolled
-        return false;
-      }
-    };
+  const checkBiometricSupport = async () => {
+    const hasHardware = await LocalAuthentication.hasHardwareAsync();
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+    const supportedTypes =
+      await LocalAuthentication.supportedAuthenticationTypesAsync();
+
+    if (hasHardware && isEnrolled && supportedTypes.length > 0) {
+      // Biometrics are available and enrolled
+      await authenticateWithBiometrics();
+      return true;
+    } else {
+      // Biometrics are not available or not enrolled
+      return false;
+    }
+  };
 
   interface CardProps {
     stateValue?: boolean;
@@ -159,7 +149,7 @@ export default function Settings() {
         alignItems: "center",
       }}
     >
-      <AuthModal modalVisible={auth} setModalVisible={setAuth} isBiometric={ isBiometric } />
+      {/*<AuthModal modalVisible={auth} setModalVisible={setAuth} isBiometric={isBiometric} />*/}
 
       <Header title={`Settings`} showBack={false} showRight={false} />
 
@@ -178,21 +168,29 @@ export default function Settings() {
         setStatevalue={toggleBiometric}
         text="Toggle biometrics"
       />
-      <NotCard text={"Change password"} onPress={
-        () => {checkBiometricSupport();}
-      }/>
+      <NotCard
+        text={"Change password"}
+        onPress={() => {
+          checkBiometricSupport();
+        }}
+      />
 
       <NotCard
         text={"RESET"}
         textColor={colors.danger}
-        onPress={() => { setDeleteMode({ action: "reset", text: "Reset" }); }}
+        onPress={() => {
+          setDeleteMode({ action: "reset", text: "Reset" });
+          router.replace("/");
+        }}
       />
 
       <NotCard
         text={"LOG OUT"}
         textColor={colors.danger}
-        onPress={() => { setAuth(null); 
-        router.replace("/");}}
+        onPress={() => {
+          setAuth(null);
+          router.replace("/");
+        }}
       />
     </SafeAreaView>
   );

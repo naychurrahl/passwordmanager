@@ -19,7 +19,6 @@ export default function WriteModal({
 }: {
   modalVisible: ProfileProp | null;
   setModalVisible: (value: ProfileProp | null) => void;
-  fetchInfo?: () => void;
   user?: string | null;
 }) {
   const { colors, toggleRefresh } = useApp();

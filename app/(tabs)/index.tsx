@@ -345,7 +345,6 @@ export default function Index() {
       <WriteModal
         modalVisible={writeMode}
         setModalVisible={setWriteMode}
-        fetchInfo={fetchInfo}
         user={auth}
       />
 

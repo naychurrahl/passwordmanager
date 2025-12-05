@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import * as LocalAuthentication from "expo-local-authentication";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useApp } from "@/components/AppContext";
 
 export default function AuthModal({
   modalVisible,
@@ -23,6 +24,8 @@ export default function AuthModal({
   
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
 
+  const { toggleRefresh } = useApp();
+
   const handleLogin = async (bio: boolean = false) => {
     if (password || bio) {
 
@@ -31,6 +34,7 @@ export default function AuthModal({
       if (key) {
         if (JSON.parse(key) === password || bio) {
           
+          toggleRefresh();
           setModalVisible(JSON.stringify(Date.now() + 9000));
         }
       } else {
@@ -90,7 +94,7 @@ export default function AuthModal({
       checkBiometricSupport();
     }
     
-  }, [ modalVisible]);
+  }, [ modalVisible ]);
 
   return (
     <Modal
